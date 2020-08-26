@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">W03-Calculations</string>
+    <string name="equals">bằng</string>
+    <string name="plus">cộng</string>
+    <string name="minus">trừ</string>
+    <string name="hint">0</string>
+</resources>
