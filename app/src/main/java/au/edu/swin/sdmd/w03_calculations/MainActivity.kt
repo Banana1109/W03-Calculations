@@ -1,7 +1,9 @@
 package au.edu.swin.sdmd.w03_calculations
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.renderscript.ScriptGroup
 import android.util.Log
 import android.widget.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -23,6 +25,16 @@ class MainActivity : AppCompatActivity() {
     override fun onPause(){
         super.onPause()
         Log.i("LIFECYCLE", "paused")
+        val sharedPref= this.getPreferences(Context.MODE_PRIVATE) ?: return
+        with (sharedPref.edit()){
+            val number1 =findViewById<EditText>(R.id.number1)
+            putString("num1",number1.text.toString())
+            val number2 =findViewById<EditText>(R.id.number2)
+            putString("num2",number2.text.toString())
+            val plus=findViewById<RadioButton>(R.id.plus)
+            putBoolean("plus",plus.isChecked)
+            apply();
+        }
     }
     override fun onStart(){
         super.onStart()
@@ -37,6 +49,32 @@ class MainActivity : AppCompatActivity() {
         val number1 = findViewById<EditText>(R.id.number1)
         val number2 = findViewById<EditText>(R.id.number2)
         val equals = findViewById<Button>(R.id.equals)
+        val plus=findViewById<RadioButton>(R.id.plus)
+        val minus=findViewById<RadioButton>(R.id.minus)
+
+        val sharedPref=this.getPreferences(Context.MODE_PRIVATE)
+        val num1=sharedPref.getString("num1","0").toString()
+        val num2=sharedPref.getString("num2","0").toString()
+        val plus1=sharedPref.getBoolean("plus",true)
+
+        number1.setText(num1)
+        number2.setText(num2)
+        if(plus1) {
+            plus.isChecked = true
+            minus.isChecked = false
+        }
+        else{
+            plus.isChecked = false
+            minus.isChecked = true
+        }
+        val result1:Int
+        if (plus.isChecked){
+            result1 = add(number1.text.toString(), number2.text.toString())}
+        else{
+            result1 = minus(number1.text.toString(), number2.text.toString())}
+        // TODO: show result on the screen
+        findViewById<TextView>(R.id.answer).text=result1.toString()
+
         equals.setOnClickListener { _ ->
             val plus = findViewById<RadioButton>(R.id.plus)
             val result:Int
